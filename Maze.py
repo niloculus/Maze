@@ -7,3 +7,8 @@ class Maze:
     def get_turtle(self):
         self.t=turtle.turtles()[0]
         return(self.t)
+    def bgcolor(self):
+        self.b = turtle.bgcolor('blue')
+
+
+

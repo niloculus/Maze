@@ -15,15 +15,14 @@ class MazeTests(unittest.TestCase):
         b = self.m.bgcolor()
         self.assertTrue(self.m.screen.bgcolor() == "blue" , f"the color is {self.m.screen.bgcolor()}")
     def test_size(self):
-        s = self.m.screensize()
         self.assertTrue(self.m.screen.window_width() == SIZE)
         self.assertTrue(self.m.screen.window_height() == SIZE)
 
+        # s = self.m.screen.screensize() second line of code
         # self.assertTrue(s[0] == SIZE, f"the x-dim is {s[0]}")
         # self.assertTrue(s[1] == SIZE, f"the y-dim is {s[1]}")
 
-        # s = self.m.screensize()
-        # self.assertTrue(self.m.screensize() == "SIZE , SIZE" , f"the size is {self.m.screensize()}")
+        # self.assertTrue(self.m.screen.screensize() == (SIZE , SIZE) , f"the size is {self.m.screen.screensize()}")
 
 
 

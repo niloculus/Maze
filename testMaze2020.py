@@ -23,6 +23,11 @@ class MazeTests(unittest.TestCase):
         # self.assertTrue(s[1] == SIZE, f"the y-dim is {s[1]}")
 
         # self.assertTrue(self.m.screen.screensize() == (SIZE , SIZE) , f"the size is {self.m.screen.screensize()}")
+    def testMatrixSize(self):
+        self.assertTrue(len(self.m.matrix)==SIZE/20)
+
+
+
 
 
 

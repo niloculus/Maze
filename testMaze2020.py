@@ -12,7 +12,6 @@ class MazeTests(unittest.TestCase):
         t = self.m.get_turtle()
         self.assertTrue(type(t)==turtle.Turtle, f"returned {type(t)}")
     def test_background(self):
-        b = self.m.bgcolor()
         self.assertTrue(self.m.screen.bgcolor() == "blue" , f"the color is {self.m.screen.bgcolor()}")
     def test_size(self):
         self.assertTrue(self.m.screen.window_width() == SIZE)
@@ -25,18 +24,14 @@ class MazeTests(unittest.TestCase):
         # self.assertTrue(self.m.screen.screensize() == (SIZE , SIZE) , f"the size is {self.m.screen.screensize()}")
     def testMatrixSize(self):
         self.assertTrue(len(self.m.matrix)==SIZE/20)
+    def testReset(self):
+        self.m.reset()
+        self.assertTrue(self.m.matrix[0][0] == 0)
+        p = self.m.t.pos()
+        self.assertTrue(self.m.t.pos() == (-(SIZE / 2 - 10), SIZE / 2 - 10))
 
-
-
-
-
-
-
-
-
-
-
-
+    # def Test_getMatrixValue(self):
+    #     self.assertTrue(m.getMatrixValueAt(m.turtle.position) == 0)
 
 if __name__=="__main__":
     unittest.main()

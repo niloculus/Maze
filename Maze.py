@@ -12,7 +12,7 @@ class Maze:
         return (self.t)
     def reset(self):
         self.screen = turtle.getscreen()
-        turtle.setup(400, 400)
+        turtle.setup(400*1.3, 400*1.3)
         self.t = turtle.turtles()[0]
         self.t.penup()
         self.t.goto(-(SIZE / 2 - 20), SIZE / 2 - 20)
@@ -22,16 +22,69 @@ class Maze:
         self.t.color('white')
         self.t.stamp()
         self.matrix[0][0] = 0
+    def fourcorners(self):
+        self.t.goto(-180, 180)
+        self.t.stamp()
+        self.t.goto(-180, -200)
+        self.t.stamp()
+        self.t.goto(200, -200)
+        self.t.stamp()
+        self.t.goto(200, 180)
+        self.t.stamp()
+    def dig(self, d):
+        p = self.t.pos()
+        if d == EAST:
+            if p[0] == 180:
+                return p
+            else:
+                newpos = (p[0] + 20, p[1])
+                self.t.stamp()
+                self.t.goto(newpos)
+                i,j = self.pos2index(newpos)
+                self.matrix[i][j] = 0
+        if d == WEST:
+            if p[0] == -180:
+                return p
+            else:
+                newpos = (p[0] - 20, p[1])
+                self.t.goto(newpos)
+                i, j = self.pos2index(newpos)
+                self.matrix[i][j] = 0
+        if d == NORTH:
+            if p[1] == 180:
+                return p
+            else:
+                newpos = (p[0], p[1] + 20)
+                self.t.goto(newpos)
+                i, j = self.pos2index(newpos)
+                self.matrix[i][j] = 0
+        if d == SOUTH:
+            if p[1] == -200:
+                return p
+            else:
+                newpos = (p[0], p[1] - 20)
+                self.t.goto(newpos)
+                i, j = self.pos2index(newpos)
+                self.matrix[i][j] = 0
+    def pos2index(self, p):
+        """ converts tuple p into tuple idx
+        200,-200 == 19,19
+        -180,180 == 0,0
+        -180,-200 == 0,19
+        200,180 == 19,0 """
+
+        i = int((p[0] + 180) / 20)
+        j = int((180 - p[1]) / 20)
+        return ((i, j))
+
     def getMatrixValueAt(self, pos):
-        m = Maze()
-        m.reset()
         x = int((pos[0] + 180) / 20)
-        y = 20 - int((pos[1] + 200) / 20) - 1
+        y = int((pos[1] - 180) / 20)
         v = self.matrix[x][y]
         return v
     def setMatrixValueAt(self, pos, value):
-        x = int((pos[0] + 200) / 20)
-        y = 20 - int((pos[1] + 200) / 20) - 1
+        x = int((pos[0] + 180) / 20)
+        y = int((pos[1] - 180) / 20)
         try:
             self.matrix[y][x] = value
         except:
@@ -42,11 +95,10 @@ class Maze:
         if value == 1:
             self.t.color('blue')
             self.t.stamp()
-            return True
+        return True
 
 
 
-# def dig(self, d):
-    #     return self.t.pos()
+
 
 

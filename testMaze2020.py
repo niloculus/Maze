@@ -1,86 +1,129 @@
-import turtle
 import unittest
+import turtle
+from Maze import Maze
+
 SIZE = 400
+BLOCKSIZE = 20
 
 EAST = 0
 NORTH = 1
 WEST = 2
 SOUTH = 3
-from Maze import Maze
+
 
 class MazeTests(unittest.TestCase):
     def setUp(self):
         self.m = Maze()
-    def test_maze(self):
-        self.assertTrue(type(self.m.screen) == turtle._Screen,"No Screen! type is" + str(type(self.m.screen)))
-    def test_turtle(self):
-        t = self.m.get_turtle()
-        self.assertTrue(type(t)==turtle.Turtle, f"returned {type(t)}")
-    def test_background(self):
-        self.assertTrue(self.m.screen.bgcolor() == "blue" , f"the color is {self.m.screen.bgcolor()}")
-    def test_size(self):
-        self.assertTrue(self.m.screen.window_width() == SIZE*1.3)
-        self.assertTrue(self.m.screen.window_height() == SIZE*1.3)
+
+    def testScreen(self):
+        self.assertTrue(type(self.m.s) == turtle._Screen, "No Screen!")
+
+    def testTurtle(self):
+        self.assertTrue(type(self.m.turtle) == turtle.Turtle)
+
+    def testBackground(self):
+        self.assertTrue(self.m.s.bgcolor() == 'blue')
+
+    def testSize(self):
+        self.assertTrue(self.m.s.window_height() == SIZE * 1.3, f"window height is {self.m.s.window_height()}")
+        self.assertTrue(self.m.s.window_width() == SIZE * 1.3)
+
     def testMatrixSize(self):
-        self.assertTrue(len(self.m.matrix)==SIZE/20)
+        self.assertTrue(len(self.m.matrix) == SIZE / BLOCKSIZE)
+
     def testReset(self):
         self.m.reset()
-        self.assertTrue(self.m.matrix[0][0] == 0)
-        p = self.m.t.pos()
-        self.assertTrue(self.m.t.pos() == (-(SIZE / 2 - 20), SIZE / 2 - 20))
+        self.assertTrue(self.m.turtle.pos() == (-(SIZE / 2 - BLOCKSIZE), SIZE / 2 - BLOCKSIZE))
+
     def testCoordinates(self):
-        self.m.t.goto(-180, 180)
-        self.m.t.stamp()
-        self.m.t.goto(-180, -200)
-        self.m.t.stamp()
-        self.m.t.goto(200, -200)
-        self.m.t.stamp()
-        self.m.t.goto(200, 180)
-        self.m.t.stamp()
-        self.assertTrue((0, 0) == self.m.pos2index((-180, 180)), f"{self.m.pos2index((-180, 180))}")
-        self.assertTrue((19, 19) == self.m.pos2index((200, -200)), f"{self.m.pos2index((200, -200))}")
+        self.m.turtle.goto((-(SIZE/2 - BLOCKSIZE)), (SIZE/2 - BLOCKSIZE))
+        self.m.turtle.stamp()
+        self.m.turtle.goto((-(SIZE/2 - BLOCKSIZE)), (-(SIZE/2)))
+        self.m.turtle.stamp()
+        self.m.turtle.goto((SIZE/2), (-(SIZE/2)))
+        self.m.turtle.stamp()
+        self.m.turtle.goto((SIZE/2), (SIZE/2 - BLOCKSIZE))
+        self.m.turtle.stamp()
+        self.assertTrue((0, 0) == self.m.pos2index(((-(SIZE/2 - BLOCKSIZE)), (SIZE/2 - BLOCKSIZE))), f"{self.m.pos2index(((-(SIZE/2 - BLOCKSIZE)), (SIZE/2 - BLOCKSIZE)))}")
+        self.assertTrue(((SIZE/BLOCKSIZE -1), (SIZE/BLOCKSIZE -1)) == self.m.pos2index(((SIZE/2), (-(SIZE/2)))), f"{self.m.pos2index(((SIZE/2), (-(SIZE/2))))}")
+
     def testSettingMatrixValues(self):
         self.m.reset()
-        value = self.m.getMatrixValueAt(self.m.t.position())
+        value = self.m.getMatrixValueAt(self.m.turtle.position())
         self.assertTrue(0 == value)
         value = 1
-        self.m.setMatrixValueAt(self.m.t.position(), value)
+        self.m.setMatrixValueAt(self.m.turtle.position(), value)
         self.assertEqual(self.m.matrix[0][0], 1)
-        self.m.t.goto(-160, 180)
-        value = self.m.getMatrixValueAt(self.m.t.position())
+        self.m.turtle.goto(-(SIZE/2 - 2*BLOCKSIZE), SIZE/2 - BLOCKSIZE)
+        value = self.m.getMatrixValueAt(self.m.turtle.position())
         self.assertTrue(1 == value)
         value = 0
-        self.m.setMatrixValueAt(self.m.t.position(), value)
+        self.m.setMatrixValueAt(self.m.turtle.position(), value)
         self.assertEqual(self.m.matrix[0][1], 0)
-        self.m.t.goto(200, -200)
-        value = self.m.getMatrixValueAt(self.m.t.position())
+        self.m.turtle.goto(SIZE/2, -(SIZE/2))
+        value = self.m.getMatrixValueAt(self.m.turtle.position())
         self.assertTrue(1 == value)
         value = 0
-        self.m.setMatrixValueAt(self.m.t.position(), value)
+        self.m.setMatrixValueAt(self.m.turtle.position(), value)
         self.assertTrue(0 == value)
+
     def testSetMatrixValueAt(self):
-        self.m.setMatrixValueAt(self.m.t.pos(), 1)
-        self.assertTrue(self.m.matrix[0][0], 1)
-        self.m.setMatrixValueAt(self.m.t.pos(), 0)
+        self.m.setMatrixValueAt(self.m.turtle.pos(), 1)
+        self.assertTrue(self.m.matrix[0][0] == 1)
+        self.m.setMatrixValueAt(self.m.turtle.pos(), 0)
         self.assertTrue(self.m.matrix[0][0] == 0)
 
     def testDig(self):
         self.m.dig(EAST)
-        self.assertEqual(self.m.t.pos(), (-160,180))
+        self.assertEqual(self.m.turtle.pos(), (-(SIZE/2 - 2*BLOCKSIZE), SIZE/2 - BLOCKSIZE))
         self.assertTrue(self.m.matrix[1][0] == 0)
         self.m.dig(WEST)
-        self.assertEqual(self.m.t.pos(), (-180,180))
+        self.assertEqual(self.m.turtle.pos(), (-(SIZE/2 - BLOCKSIZE), SIZE/2 - BLOCKSIZE))
         self.m.dig(NORTH)
-        self.assertEqual(self.m.t.pos(), (-180, 180))
+        self.assertEqual(self.m.turtle.pos(), (-(SIZE/2 - BLOCKSIZE), SIZE/2 - BLOCKSIZE))
         self.m.dig(SOUTH)
-        self.assertEqual(self.m.t.pos(), (-180, 160))
+        self.assertEqual(self.m.turtle.pos(), (-(SIZE/2 - BLOCKSIZE), SIZE/2 - 2*BLOCKSIZE))
+
+    def testBreakThrough(self):
+        self.m.dig(EAST)
+        self.m.dig(EAST)
+        self.m.dig(EAST)
+        self.m.dig(EAST)
+        self.m.dig(SOUTH)
+        self.m.dig(SOUTH)
+        self.m.dig(WEST)
+        self.m.dig(WEST)
+        self.m.dig(NORTH)
+        self.assertTrue(self.m.turtle.pos() == (-(SIZE/2 - 3*BLOCKSIZE), SIZE/2 - 3*BLOCKSIZE),f"{self.m.turtle.pos()}")
+
+    def testBreakThrough2(self):
+        self.m.dig(SOUTH)
+        self.m.dig(SOUTH)
+        self.m.dig(SOUTH)
+        self.m.dig(SOUTH)
+        self.m.dig(EAST)
+        self.m.dig(EAST)
+        self.m.dig(NORTH)
+        self.m.dig(NORTH)
+        self.m.dig(WEST)
+        self.assertTrue(self.m.turtle.pos() == (-(SIZE/2 - 3*BLOCKSIZE), SIZE/2 - 3*BLOCKSIZE), f"{self.m.turtle.pos()}")
 
 
-# def testdig(self):
-    #     m=Maze()
-    #     m.reset()
-    #     r = m.dig(EAST)
-    #     self.assertTrue(r ==(-160,180), "got " + str(r))
+    def testNeighbors(self):
+        self.assertTrue(self.m.neighbors() == [(1, 0), (-1, 1), (-1, 2), (1, 3)], f"{self.m.neighbors()}")
+        r = self.m.neighbors()
+        self.assertTrue((r[0] == (1, 0) and r[1] == (-1, 1) and
+                         r[2] == (-1, 2) and r[3] == (1, 3)), "got " + str(r))
+        self.m.reset()
+        self.m.turtle.goto(-(SIZE/2 - 2*BLOCKSIZE), SIZE/2 - 2*BLOCKSIZE)
+        r = self.m.neighbors()
+        self.assertTrue((r[0] == (1, 0) and r[1] == (-1, 1) and
+                         r[2] == (-1, 2) and r[3] == (1, 3)), "got " + str(r))
+        self.m.reset()
+        self.m.turtle.goto(-(SIZE/2 - 3*BLOCKSIZE), SIZE/2 - 3*BLOCKSIZE)
+        r = self.m.neighbors()
+        self.assertTrue((r[0] == (1, 0) and r[1] == (1, 1) and
+                         r[2] == (1, 2) and r[3] == (1, 3)), "got " + str(r))
 
-if __name__=="__main__":
+if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,7 @@ import turtle
 from Maze import Maze
 
 SIZE = 400
-BLOCKSIZE = 20
+BLOCKSIZE = 10
 
 EAST = 0
 NORTH = 1

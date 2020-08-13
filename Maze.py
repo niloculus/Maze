@@ -23,10 +23,10 @@ class Maze:
         self.s.bgcolor('blue')
         self.turtle.penup()
         self.s.setup(width=SIZE * 1.3, height=SIZE * 1.3)
-        # self.turtle.turtlesize()
         self.turtle.goto(-(SIZE / 2 - BLOCKSIZE), SIZE / 2 - BLOCKSIZE)
         self.turtle.shape('square')
         self.turtle.color('white')
+        self.turtle.turtlesize(BLOCKSIZE / 20, BLOCKSIZE / 20, BLOCKSIZE / 20)
         self.turtle.stamp()
         self.matrix[0][0] = 0
         self.depth = 0
